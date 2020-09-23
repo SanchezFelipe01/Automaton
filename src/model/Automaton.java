@@ -96,14 +96,17 @@ public class Automaton {
 		ArrayList<State> block;
 		String c1;
 		String c2;
+		int count = 0;
 
 		for (int i = 0; i < cState.size()-1; i++) {
 			
 			if (!cState.get(i).getVisited()) {
-				
+
+				cState.get(i).setVisited(true);
+				cState.get(i).setBlock(count);
 				block = new ArrayList<>();
 				block.add(cState.get(i));
-				cState.get(i).setVisited(true);
+				
 
 				for (int j = i+1; j < cState.size(); j++) {
 					if (!cState.get(j).getVisited()) {
@@ -112,15 +115,16 @@ public class Automaton {
 						c2 = String.valueOf(cState.get(j).getResponses());
 
 						if (c1.equals(c2)) {
-							block.add(cState.get(j));
 							cState.get(j).setVisited(true);
+							cState.get(j).setBlock(count);
+							block.add(cState.get(j));
 						}
 
 					}
 				}
 
 				list.add(block);
-
+				count++;
 			}
 
 
@@ -128,5 +132,14 @@ public class Automaton {
 
 		return list;
 	}
+
+	public ArrayList<ArrayList<State>> getFinalPartition(){
+
+		ArrayList<ArrayList<State>> list = getFirstPartition();
+
+		
+
+		return null;
+	} 
 
 }

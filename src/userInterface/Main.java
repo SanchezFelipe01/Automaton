@@ -130,7 +130,7 @@ public class Main {
 			block = list.get(n);
 
 			for (int l = 0; l < block.size(); l++) {
-				System.out.print(block.get(l).getName() + " ");
+				System.out.print(block.get(l).getName() + block.get(l).getBlock() + " ");
 			}
 
 			System.out.println();

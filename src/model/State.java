@@ -6,12 +6,14 @@ public class State {
     
     private String name;
     private boolean visited;
+    private int block;
     private char[] responses;
     private ArrayList<State> successorStates;
     
     public State(String name, char[] responses){
         this.name = name;
         visited = false;
+        block = 0;
         this.responses = responses;
         this.successorStates = new ArrayList<>();
     }
@@ -44,6 +46,14 @@ public class State {
 
     public void addSuccessor(State s){
         successorStates.add(s);
+    }
+
+    public int getBlock(){
+        return block;
+    }
+
+    public void setBlock(int block){
+        this.block = block;
     }
 
 }
