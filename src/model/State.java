@@ -7,6 +7,7 @@ public class State {
     private String name;
     private boolean visited;
     private int block;
+    private int prevBlock;
     private char[] responses;
     private ArrayList<State> successorStates; //Cambiar a arreglo de dos posiciones
     
@@ -14,6 +15,7 @@ public class State {
         this.name = name;
         visited = false;
         block = 0;
+        prevBlock = 0;
         this.responses = responses;
         this.successorStates = new ArrayList<>();
     }
@@ -50,6 +52,14 @@ public class State {
 
     public int getBlock(){
         return block;
+    }
+
+    public int getPrevBlock(){
+        return prevBlock;
+    }
+
+    public void changeBlocks(){
+        prevBlock = block;
     }
 
     public void setBlock(int block){

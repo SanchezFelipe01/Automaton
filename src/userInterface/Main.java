@@ -10,7 +10,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		ArrayList<State> states = new ArrayList<>();
-		
+		/*
 		//Moore example
 		char[] c1 = new char[]{'0'};
 		char[] c2 = new char[]{'1'};
@@ -62,8 +62,8 @@ public class Main {
 		states.add(j);
 		states.add(k);
 		//----------------------------------------------------------
+		*/
 		
-		/*
 		//Mealy Example
 		char[] c1 = new char[]{'0', '0'};
 		char[] c2 = new char[]{'1', '1'};
@@ -107,7 +107,7 @@ public class Main {
 		states.add(g);
 		states.add(h);
 		states.add(j);
-		*/
+		
 		//-----------------------------------------------------------------
 
 
@@ -128,7 +128,7 @@ public class Main {
 				System.out.print(block.get(l).getName() + block.get(l).getBlock() + " ");
 			}
 
-			System.out.println();
+			System.out.println("----");
 
 		}
 		

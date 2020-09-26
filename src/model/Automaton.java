@@ -104,6 +104,7 @@ public class Automaton {
 
 				cState.get(i).setVisited(true);
 				cState.get(i).setBlock(count);
+				cState.get(i).changeBlocks();
 				block = new ArrayList<>();
 				block.add(cState.get(i));
 				
@@ -117,6 +118,7 @@ public class Automaton {
 						if (c1.equals(c2)) {
 							cState.get(j).setVisited(true);
 							cState.get(j).setBlock(count);
+							cState.get(j).changeBlocks();
 							block.add(cState.get(j));
 						}
 
@@ -138,47 +140,58 @@ public class Automaton {
 		ArrayList<ArrayList<State>> list1 = getFirstPartition();
 		ArrayList<ArrayList<State>> list2 = new ArrayList<>();
 
-		for (ArrayList<State> arrayList : list1) {
-			for (State s : arrayList){
-				s.setVisited(false);
-			}
-		}
-
-		int count;
+		//int count;
 		ArrayList<State> newBlocks;
 		boolean exit1 = true;
-		boolean flag = false;
+		int iteraciones = 1;
 
 		while (exit1) {
 			
-			count = 0;
+			int count = 0;
 
+			for (ArrayList<State> arrayList : list1) {
+				for (State s : arrayList){
+					s.setVisited(false);
+					s.changeBlocks();
+					System.out.println("----------------------");
+					System.out.println(s.getName() + " " + s.getPrevBlock());
+					System.out.println("----------------------");
+				}
+			}
+
+			System.out.println("Empezando iteracion: " + iteraciones);
+			int iteraciones2 = 1;
 			for (ArrayList<State> block : list1) {
 				
+				System.out.println("Bloque " + iteraciones2 + " de particion " + iteraciones);
 				for (int i = 0; i < block.size(); i++) {
 					//System.out.println("i = " +i);
-					if (block.get(i).getVisited() == flag) {
-						
-						block.get(i).setVisited(!flag);
+					
+					if (block.get(i).getVisited() == false) {
+						System.out.println("Verificando estado: " + block.get(i).getName());
+						block.get(i).setVisited(true);
 						block.get(i).setBlock(count);
 						newBlocks = new ArrayList<>();
 						newBlocks.add(block.get(i));
 
 						for (int j = i+1; j < block.size(); j++) {
 							
-							if (block.get(j).getVisited() == flag) {
-								State s1 = block.get(i).getSuccessorStates().get(0);
-								State s2 = block.get(i).getSuccessorStates().get(1);
-								State c1 = block.get(j).getSuccessorStates().get(0);
-								State c2 = block.get(j).getSuccessorStates().get(1);
-
-								if (s1.getBlock() == c1.getBlock() && s2.getBlock() == c2.getBlock()) {
-									
+							if (block.get(j).getVisited() == false) { // Solo funciona con dos estados sucesores
+								System.out.println("Comparando estado " + block.get(i).getName() + " con estado " + block.get(j).getName());
+								int i1 = block.get(i).getSuccessorStates().get(0).getPrevBlock();
+								int i2 = block.get(i).getSuccessorStates().get(1).getPrevBlock();
+								int	j1 = block.get(j).getSuccessorStates().get(0).getPrevBlock();
+								int	j2 = block.get(j).getSuccessorStates().get(1).getPrevBlock();
+								System.out.println("Estado " + block.get(i).getName() + " = " + block.get(i).getSuccessorStates().get(0).getName() + i1 + " " + block.get(i).getSuccessorStates().get(1).getName() + i2);
+								System.out.println("Estado " + block.get(j).getName() + " = " + block.get(j).getSuccessorStates().get(0).getName() + j1 + " " + block.get(j).getSuccessorStates().get(1).getName() + j2);
+								if (i1 == j1 && i2 == j2) {
+									System.out.println(block.get(i).getName() + " y " + block.get(j).getName() + " estan en la misma particion");
+									//block.get(i).setBlock(count);
 									block.get(j).setBlock(count);
-									block.get(j).setVisited(!flag);
+									block.get(j).setVisited(true);
 									newBlocks.add(block.get(j));
 
-								}
+								}else System.out.println(block.get(i).getName() + " y " + block.get(j).getName() + " NO estan en la misma particion");
 
 							}
 
@@ -186,22 +199,26 @@ public class Automaton {
 		
 						list2.add(newBlocks);
 						count++;
-						//System.out.println("Added");
 
-					}
+					}else System.out.println("Estado " + block.get(i).getName() + " visitado");
 
 				}
+				System.out.println("Fin de Bloque " + iteraciones2 + " de particion " + iteraciones);
+				iteraciones2++;
 
 			}
+
+			System.out.println("Fin particion " + iteraciones);
+			iteraciones++;
 			
 			//System.out.println(printPartition(list1));
 			System.out.println(printPartition(list2));
 
 			if (!list1.equals(list2)) {
 				
-				list1 = list2;
+				list1 = new ArrayList<>(list2);
 				list2 = new ArrayList<>();
-				flag = true;
+				//flag = true;
 			}else{
 				exit1 = false;
 			}
