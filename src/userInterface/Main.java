@@ -10,62 +10,8 @@ public class Main {
 	public static void main(String[] args) {
 		
 		ArrayList<State> states = new ArrayList<>();
-		/*
-		char[] c1 = new char[]{'0', '1', '2'};
-		char[] c2 = new char[]{'0', '1', '2'};
-
-		State d = new State("D", c1);
-		State e = new State("E", c2);
-		State f = new State("F");
-		State g = new State("G");
-		State h = new State("H");
-
-		d.addSuccessor(e);
-		d.addSuccessor(d);
-		e.addSuccessor(d);
-		e.addSuccessor(f);
-		f.addSuccessor(f);
-		f.addSuccessor(d);
-		g.addSuccessor(e);
-		g.addSuccessor(h);
-		h.addSuccessor(d);
-		h.addSuccessor(g);
-
-		states.add(d);
-		states.add(e);
-		states.add(f);
-		states.add(g);
-		states.add(h);
 		
-		
-		State d = new State("P1");
-		State e = new State("P2");
-		State f = new State("P3");
-		State g = new State("P4");
-		State h = new State("P5");
-		State i = new State("P6");
-
-		d.addSuccessor(f);
-		d.addSuccessor(g);
-		e.addSuccessor(h);
-		e.addSuccessor(f);
-		f.addSuccessor(g);
-		f.addSuccessor(h);
-		g.addSuccessor(f);
-		g.addSuccessor(g);
-		h.addSuccessor(e);
-		h.addSuccessor(h);
-		i.addSuccessor(i);
-		i.addSuccessor(g);
-
-		states.add(d);
-		states.add(e);
-		states.add(f);
-		states.add(g);
-		states.add(h);
-		states.add(i);
-		*/
-
+		//Moore example
 		char[] c1 = new char[]{'0'};
 		char[] c2 = new char[]{'1'};
 
@@ -115,7 +61,54 @@ public class Main {
 		states.add(i);
 		states.add(j);
 		states.add(k);
+		//----------------------------------------------------------
 		
+		/*
+		//Mealy Example
+		char[] c1 = new char[]{'0', '0'};
+		char[] c2 = new char[]{'1', '1'};
+		char[] c3 = new char[]{'1', '0'};
+
+		State a = new State("A", c1);
+		State b = new State("B", c2);
+		State c = new State("C", c1);
+		State d = new State("D", c2);
+		State e = new State("E", c2);
+		State f = new State("F", c1);
+		State g = new State("G", c2);
+		State h = new State("H", c3);
+		State j = new State("J", c3);
+
+		a.addSuccessor(b);
+		a.addSuccessor(c);
+		b.addSuccessor(c);
+		b.addSuccessor(d);
+		c.addSuccessor(d);
+		c.addSuccessor(e);
+		d.addSuccessor(c);
+		d.addSuccessor(b);
+		e.addSuccessor(f);
+		e.addSuccessor(e);
+		f.addSuccessor(g);
+		f.addSuccessor(c);
+		g.addSuccessor(f);
+		g.addSuccessor(g);
+		h.addSuccessor(j);
+		h.addSuccessor(b);
+		j.addSuccessor(h);
+		j.addSuccessor(d);
+
+		states.add(a);
+		states.add(b);
+		states.add(c);
+		states.add(d);
+		states.add(e);
+		states.add(f);
+		states.add(g);
+		states.add(h);
+		states.add(j);
+		*/
+		//-----------------------------------------------------------------
 
 
 		char[] stimuli = new char[]{'0', '1'};
@@ -123,7 +116,9 @@ public class Main {
 
 		Automaton auto = new Automaton("type", states, stimuli, outputs);
 		
-		ArrayList<ArrayList<State>> list = auto.getFirstPartition();
+		//ArrayList<ArrayList<State>> list = auto.getFirstPartition();
+		ArrayList<ArrayList<State>> list = auto.getFinalPartition();
+		//System.out.println(list.size());
 		ArrayList<State> block;
 
 		for (int n = 0; n < list.size(); n++) {

@@ -84,7 +84,7 @@ public class Automaton {
 		}
 	}
 	
-	public ArrayList<ArrayList<State>> getFirstPartition(){
+	public ArrayList<ArrayList<State>> getFirstPartition(){ //Cambiar a private
 
 		ArrayList<State> cState = getConnected();
 
@@ -135,11 +135,107 @@ public class Automaton {
 
 	public ArrayList<ArrayList<State>> getFinalPartition(){
 
-		ArrayList<ArrayList<State>> list = getFirstPartition();
+		ArrayList<ArrayList<State>> list1 = getFirstPartition();
+		ArrayList<ArrayList<State>> list2 = new ArrayList<>();
 
+		for (ArrayList<State> arrayList : list1) {
+			for (State s : arrayList){
+				s.setVisited(false);
+			}
+		}
+
+		int count;
+		ArrayList<State> newBlocks;
+		boolean exit1 = true;
+		boolean flag = false;
+
+		while (exit1) {
+			
+			count = 0;
+
+			for (ArrayList<State> block : list1) {
+				
+				for (int i = 0; i < block.size(); i++) {
+					//System.out.println("i = " +i);
+					if (block.get(i).getVisited() == flag) {
+						
+						block.get(i).setVisited(!flag);
+						block.get(i).setBlock(count);
+						newBlocks = new ArrayList<>();
+						newBlocks.add(block.get(i));
+
+						for (int j = i+1; j < block.size(); j++) {
+							
+							if (block.get(j).getVisited() == flag) {
+								State s1 = block.get(i).getSuccessorStates().get(0);
+								State s2 = block.get(i).getSuccessorStates().get(1);
+								State c1 = block.get(j).getSuccessorStates().get(0);
+								State c2 = block.get(j).getSuccessorStates().get(1);
+
+								if (s1.getBlock() == c1.getBlock() && s2.getBlock() == c2.getBlock()) {
+									
+									block.get(j).setBlock(count);
+									block.get(j).setVisited(!flag);
+									newBlocks.add(block.get(j));
+
+								}
+
+							}
+
+						}
 		
+						list2.add(newBlocks);
+						count++;
+						//System.out.println("Added");
 
-		return null;
+					}
+
+				}
+
+			}
+			
+			//System.out.println(printPartition(list1));
+			System.out.println(printPartition(list2));
+
+			if (!list1.equals(list2)) {
+				
+				list1 = list2;
+				list2 = new ArrayList<>();
+				flag = true;
+			}else{
+				exit1 = false;
+			}
+
+
+		}
+
+
+		return list2;
 	} 
+
+	private String printPartition(ArrayList<ArrayList<State>> list){
+
+		String message = "{";
+
+		for (ArrayList<State> block : list) {
+			message += "{";
+			for (State state : block) {
+				message += state.getName() + state.getBlock();
+			}
+			message += "}";
+		}
+
+		message += "}";
+
+		return message;
+	}
+
+	private String printSuccessorBlock(State s){
+		
+		String m = s.getName() + " = {" + s.getSuccessorStates().get(0).getName() + " " + s.getSuccessorStates().get(0).getBlock() + "}, ";
+		m += "{" + s.getSuccessorStates().get(1).getName() + " " + s.getSuccessorStates().get(1).getBlock() + "}";
+
+		return m;
+	}
 
 }

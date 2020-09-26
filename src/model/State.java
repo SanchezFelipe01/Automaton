@@ -8,7 +8,7 @@ public class State {
     private boolean visited;
     private int block;
     private char[] responses;
-    private ArrayList<State> successorStates;
+    private ArrayList<State> successorStates; //Cambiar a arreglo de dos posiciones
     
     public State(String name, char[] responses){
         this.name = name;
