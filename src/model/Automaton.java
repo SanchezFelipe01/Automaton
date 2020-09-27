@@ -84,7 +84,7 @@ public class Automaton {
 		}
 	}
 	
-	public ArrayList<ArrayList<State>> getFirstPartition(){ //Cambiar a private
+	private ArrayList<ArrayList<State>> getFirstPartition(){ 
 
 		ArrayList<State> cState = getConnected();
 
@@ -135,7 +135,7 @@ public class Automaton {
 		return list;
 	}
 
-	public ArrayList<ArrayList<State>> getFinalPartition(){
+	private ArrayList<ArrayList<State>> getFinalPartition(){
 
 		ArrayList<ArrayList<State>> list1 = getFirstPartition();
 		ArrayList<ArrayList<State>> list2 = new ArrayList<>();
@@ -215,23 +215,29 @@ public class Automaton {
 
 	}
 
-	public ArrayList<State> getReduceAutomaton(){
+	public ArrayList<State> getReducedAutomaton(){
 
 		ArrayList<ArrayList<State>> list = getFinalPartition();
 		ArrayList<State> newAutomaton = new ArrayList<>();	
 		State s;
 		int index = 0;
-		for (ArrayList<State> block : list) {
+		for (int i = 0; i < list.size(); i++) {
 			String name = "Q" + index;
 			index++;
-			s = new State(name, this.stimuli);
+			char[] array = list.get(i).get(0).getResponses();
+			s = new State(name, array);
 			newAutomaton.add(s);
 		}
 
 		for (int i = 0; i < newAutomaton.size(); i++) {
 			
-			State successor;
+			for (int j = 0; j < stimuli.length; j++) {
+				
+				int n = list.get(i).get(0).getSuccessorStates().get(j).getBlock();
+				newAutomaton.get(i).addSuccessor(newAutomaton.get(n));
 
+			}
+			
 		}
 
 		return newAutomaton;

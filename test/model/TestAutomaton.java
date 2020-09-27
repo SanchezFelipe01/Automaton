@@ -1,17 +1,19 @@
-package userInterface;
+package model;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-import model.Automaton;
-import model.State;
+import org.junit.jupiter.api.Test;
 
-public class Main {
+class TestAutomaton {
 
-	public static void main(String[] args) {
+	private Automaton auto;
+	
+	private void setUp1() { //Moore example
 		
 		ArrayList<State> states = new ArrayList<>();
-		/*
-		//Moore example
+		
 		char[] c1 = new char[]{'0'};
 		char[] c2 = new char[]{'1'};
 
@@ -61,10 +63,19 @@ public class Main {
 		states.add(i);
 		states.add(j);
 		states.add(k);
-		//----------------------------------------------------------
-		*/
+
+		char[] stimuli = new char[]{'0', '1'};
+		char[] outputs = new char[]{'0', '1'};
+
+		auto = new Automaton("Mealy", states, stimuli, outputs);
+
 		
-		//Mealy Example
+	}
+
+	private void setUp2(){//Mealy Example
+		
+		ArrayList<State> states = new ArrayList<>();
+
 		char[] c1 = new char[]{'0', '0'};
 		char[] c2 = new char[]{'1', '1'};
 		char[] c3 = new char[]{'1', '0'};
@@ -107,52 +118,59 @@ public class Main {
 		states.add(g);
 		states.add(h);
 		states.add(j);
-		
-		//-----------------------------------------------------------------
-
 
 		char[] stimuli = new char[]{'0', '1'};
 		char[] outputs = new char[]{'0', '1'};
 
-		Automaton auto = new Automaton("type", states, stimuli, outputs);
+		auto = new Automaton("Moore", states, stimuli, outputs);
+	}
+	
+	@Test
+	public void testGetReducedAutomaton1() {
+		setUp1();
 		
-		//ArrayList<ArrayList<State>> list = auto.getFirstPartition();
-		//ArrayList<ArrayList<State>> list = auto.getFinalPartition();
-		//System.out.println(list.size());
 		ArrayList<State> list = auto.getReducedAutomaton();
-		String ans = "";
-		
-		for (int n = 0; n < list.size(); n++) {
-			
-			ans += list.get(n).getName() + " = ";
+		int n = list.size();
+		boolean flag = true;
 
-			for (int m = 0; m < stimuli.length; m++) {
-				
-				ans += list.get(n).getSuccessorStates().get(m).getName() + "," + list.get(n).getResponses()[m] + " ";
+		String cad;
+		String name;
 
+		for (int i = 0; i < n && flag; i++) {
+			cad = "Q" + i;
+			name = list.get(i).getName();
+			if (!cad.equals(name)) {
+				flag = false;
 			}
-
-			ans += "\n";
 
 		}
-		/*
-		for (int n = 0; n < list.size(); n++) {
-			
-			ans += list.get(n).getName() + " = ";
+		
+		assertTrue(flag,"Unexpected automaton");
 
-			for (int m = 0; m < stimuli.length; m++) {
-				
-				ans += list.get(n).getSuccessorStates().get(m).getName() + " ";
+	}
 
+	@Test
+	public void testGetReducedAutomaton2() {
+		
+		setUp2();
+		
+		ArrayList<State> list = auto.getReducedAutomaton();
+		int n = list.size();
+		boolean flag = true;
+
+		String cad;
+		String name;
+
+		for (int i = 0; i < n && flag; i++) {
+			cad = "Q" + i;
+			name = list.get(i).getName();
+			if (!cad.equals(name)) {
+				flag = false;
 			}
 
-			ans += list.get(n).getResponses()[0] + "\n";
+		}
 
-		}*/
-
-
-		System.out.println(ans);
-		
+		assertTrue(flag,"Unexpected automaton");
 
 	}
 
