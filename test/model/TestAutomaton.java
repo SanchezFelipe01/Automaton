@@ -124,6 +124,50 @@ class TestAutomaton {
 
 		auto = new Automaton("Moore", states, stimuli, outputs);
 	}
+
+	private void setUp3(){
+
+		ArrayList<State> states = new ArrayList<>();
+		
+		//Moore example
+		char[] c1 = new char[]{'a'};
+		char[] c2 = new char[]{'b'};
+		char[] c3 = new char[]{'c'};
+
+		State a = new State("A", c1);
+		State b = new State("B", c2);
+		State c = new State("C", c3);
+		State d = new State("D", c1);
+		State e = new State("E", c2);
+
+		a.addSuccessor(b);
+		a.addSuccessor(c);
+		a.addSuccessor(d);
+		b.addSuccessor(c);
+		b.addSuccessor(d);
+		b.addSuccessor(e);
+		c.addSuccessor(d);
+		c.addSuccessor(e);
+		c.addSuccessor(a);
+		d.addSuccessor(e);
+		d.addSuccessor(a);
+		d.addSuccessor(b);
+		e.addSuccessor(c);
+		e.addSuccessor(d);
+		e.addSuccessor(e);
+		
+		states.add(a);
+		states.add(b);
+		states.add(c);
+		states.add(d);
+		states.add(e);
+
+		char[] stimuli = new char[]{'0', '1', '2'};
+		char[] outputs = new char[]{'a', 'b', 'c'};
+
+		auto = new Automaton("Moore", states, stimuli, outputs);
+
+	}
 	
 	@Test
 	public void testGetReducedAutomaton1() {
@@ -144,7 +188,7 @@ class TestAutomaton {
 			}
 
 		}
-		
+
 		assertTrue(flag,"Unexpected automaton");
 
 	}
