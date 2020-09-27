@@ -140,10 +140,8 @@ public class Automaton {
 		ArrayList<ArrayList<State>> list1 = getFirstPartition();
 		ArrayList<ArrayList<State>> list2 = new ArrayList<>();
 
-		//int count;
 		ArrayList<State> newBlocks;
 		boolean exit1 = true;
-		int iteraciones = 1;
 
 		while (exit1) {
 			
@@ -153,22 +151,13 @@ public class Automaton {
 				for (State s : arrayList){
 					s.setVisited(false);
 					s.changeBlocks();
-					System.out.println("----------------------");
-					System.out.println(s.getName() + " " + s.getPrevBlock());
-					System.out.println("----------------------");
 				}
 			}
 
-			System.out.println("Empezando iteracion: " + iteraciones);
-			int iteraciones2 = 1;
 			for (ArrayList<State> block : list1) {
-				
-				System.out.println("Bloque " + iteraciones2 + " de particion " + iteraciones);
-				for (int i = 0; i < block.size(); i++) {
-					//System.out.println("i = " +i);
-					
+				for (int i = 0; i < block.size(); i++) {			
 					if (block.get(i).getVisited() == false) {
-						System.out.println("Verificando estado: " + block.get(i).getName());
+						
 						block.get(i).setVisited(true);
 						block.get(i).setBlock(count);
 						newBlocks = new ArrayList<>();
@@ -176,59 +165,78 @@ public class Automaton {
 
 						for (int j = i+1; j < block.size(); j++) {
 							
-							if (block.get(j).getVisited() == false) { // Solo funciona con dos estados sucesores
-								System.out.println("Comparando estado " + block.get(i).getName() + " con estado " + block.get(j).getName());
-								int i1 = block.get(i).getSuccessorStates().get(0).getPrevBlock();
-								int i2 = block.get(i).getSuccessorStates().get(1).getPrevBlock();
-								int	j1 = block.get(j).getSuccessorStates().get(0).getPrevBlock();
-								int	j2 = block.get(j).getSuccessorStates().get(1).getPrevBlock();
-								System.out.println("Estado " + block.get(i).getName() + " = " + block.get(i).getSuccessorStates().get(0).getName() + i1 + " " + block.get(i).getSuccessorStates().get(1).getName() + i2);
-								System.out.println("Estado " + block.get(j).getName() + " = " + block.get(j).getSuccessorStates().get(0).getName() + j1 + " " + block.get(j).getSuccessorStates().get(1).getName() + j2);
-								if (i1 == j1 && i2 == j2) {
-									System.out.println(block.get(i).getName() + " y " + block.get(j).getName() + " estan en la misma particion");
-									//block.get(i).setBlock(count);
+							if (block.get(j).getVisited() == false) { 
+								
+								if (belongSameBlock(block.get(i), block.get(j))) {
+									
 									block.get(j).setBlock(count);
 									block.get(j).setVisited(true);
 									newBlocks.add(block.get(j));
 
-								}else System.out.println(block.get(i).getName() + " y " + block.get(j).getName() + " NO estan en la misma particion");
-
+								}
 							}
 
 						}
 		
 						list2.add(newBlocks);
 						count++;
-
-					}else System.out.println("Estado " + block.get(i).getName() + " visitado");
-
+					}
 				}
-				System.out.println("Fin de Bloque " + iteraciones2 + " de particion " + iteraciones);
-				iteraciones2++;
-
 			}
-
-			System.out.println("Fin particion " + iteraciones);
-			iteraciones++;
-			
-			//System.out.println(printPartition(list1));
-			System.out.println(printPartition(list2));
 
 			if (!list1.equals(list2)) {
 				
 				list1 = new ArrayList<>(list2);
 				list2 = new ArrayList<>();
-				//flag = true;
+
 			}else{
 				exit1 = false;
 			}
+		}
+		return list2;
+	} 
 
+	private boolean belongSameBlock(State s1, State s2){
+
+		boolean ans = true;
+		int n1, n2;
+
+		for (int i = 0; i < s1.getSuccessorStates().size() && ans; i++) {
+			
+			n1 = s1.getSuccessorStates().get(i).getPrevBlock();
+			n2 = s2.getSuccessorStates().get(i).getPrevBlock();
+
+			if (n1 != n2) {
+				ans = false;
+			}
+		}
+
+		return ans;
+
+	}
+
+	public ArrayList<State> getReduceAutomaton(){
+
+		ArrayList<ArrayList<State>> list = getFinalPartition();
+		ArrayList<State> newAutomaton = new ArrayList<>();	
+		State s;
+		int index = 0;
+		for (ArrayList<State> block : list) {
+			String name = "Q" + index;
+			index++;
+			s = new State(name, this.stimuli);
+			newAutomaton.add(s);
+		}
+
+		for (int i = 0; i < newAutomaton.size(); i++) {
+			
+			State successor;
 
 		}
 
+		return newAutomaton;
 
-		return list2;
-	} 
+	}
 
 	private String printPartition(ArrayList<ArrayList<State>> list){
 
