@@ -185,7 +185,7 @@ public class Automaton {
 					}
 				}
 			}
-
+			
 			if (!list1.equals(list2)) {
 				
 				list1 = new ArrayList<>(list2);
@@ -246,29 +246,5 @@ public class Automaton {
 
 	}
 
-	private String printPartition(ArrayList<ArrayList<State>> list){
-
-		String message = "{";
-
-		for (ArrayList<State> block : list) {
-			message += "{";
-			for (State state : block) {
-				message += state.getName() + state.getBlock();
-			}
-			message += "}";
-		}
-
-		message += "}";
-
-		return message;
-	}
-
-	private String printSuccessorBlock(State s){
-		
-		String m = s.getName() + " = {" + s.getSuccessorStates().get(0).getName() + " " + s.getSuccessorStates().get(0).getBlock() + "}, ";
-		m += "{" + s.getSuccessorStates().get(1).getName() + " " + s.getSuccessorStates().get(1).getBlock() + "}";
-
-		return m;
-	}
-
+	
 }

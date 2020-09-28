@@ -26,8 +26,7 @@
             <TextField fx:id="output_TextField" layoutX="18.0" layoutY="234.0" promptText="Ej: a,b,c..." />
             <Button fx:id="showButtonId" layoutX="18.0" layoutY="272.0" mnemonicParsing="false" onAction="#show_Button" text="Mostrar" />
             <Button fx:id="saveButtonId" disable="true" layoutX="85.0" layoutY="272.0" mnemonicParsing="false" onAction="#save_Button" text="Guardar" />
-            <Button fx:id="connectedButtonId" disable="true" layoutX="19.0" layoutY="332.0" mnemonicParsing="false" onAction="#connected_Button" text="Conexo" />
-            <Button fx:id="ReducedButtonId" disable="true" layoutX="86.0" layoutY="332.0" mnemonicParsing="false" onAction="#reduced_button" text="Reducido" />
+            <Button fx:id="ReducedButtonId" disable="true" layoutX="22.0" layoutY="336.0" mnemonicParsing="false" onAction="#reduced_button" text="Reducido" />
             <Button layoutX="154.0" layoutY="272.0" mnemonicParsing="false" onAction="#new_Button" text="Nuevo" />
          </children>
       </AnchorPane>
