@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="518.0" prefWidth="808.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.Gui">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="userInterface.Gui">
    <children>
-      <AnchorPane prefHeight="518.0" prefWidth="232.0" style="-fx-border-color: black;">
+      <AnchorPane prefHeight="625.0" prefWidth="232.0" style="-fx-border-color: black;">
          <children>
             <RadioButton fx:id="mealyOption" layoutX="18.0" layoutY="31.0" mnemonicParsing="false" text="Mealy" />
             <RadioButton fx:id="mooreOption" layoutX="18.0" layoutY="48.0" mnemonicParsing="false" text="Moore" />
@@ -31,6 +31,7 @@
             <Button layoutX="154.0" layoutY="272.0" mnemonicParsing="false" onAction="#new_Button" text="Nuevo" />
          </children>
       </AnchorPane>
-      <StackPane fx:id="centralPane" layoutX="232.0" prefHeight="518.0" prefWidth="577.0" style="-fx-border-color: black;" />
+      <StackPane fx:id="centralPane" layoutX="232.0" prefHeight="625.0" prefWidth="391.0" style="-fx-border-color: black;" />
+      <StackPane fx:id="centralPane2" layoutX="623.0" prefHeight="625.0" prefWidth="402.0" style="-fx-border-color: black;" />
    </children>
 </Pane>

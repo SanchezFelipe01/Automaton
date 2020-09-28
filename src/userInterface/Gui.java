@@ -1,6 +1,8 @@
 package userInterface;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,9 +39,15 @@ public class Gui {
 
 	@FXML
 	private StackPane centralPane;
+	
+	@FXML
+	private StackPane centralPane2;
 
 	@FXML
 	private GridPane grid;
+	
+	@FXML
+	private GridPane grid2;
 
 	@FXML
 	private Button showButtonId;
@@ -72,12 +80,14 @@ public class Gui {
 
 	@FXML
 	void connected_Button(ActionEvent event) {
-
+		
 	}
 
 	@FXML
 	void reduced_button(ActionEvent event) {
-
+		
+		ArrayList<State> list = auto.getReducedAutomaton();
+		
 	}
 
 	@FXML
@@ -85,38 +95,164 @@ public class Gui {
 
 		readStates();
 
+		String line2 = input_TextField.getText();
+		String[] inputs = line2.split(",");
+
+		String line3 = output_TextField.getText();
+		String[] outputs = line3.split(",");
+
+		char[] stimuli = castArray(inputs);
+		char[] responses = castArray(outputs);
+
+		String type;
+		ArrayList<State> states;
+
+		if (mooreOption.isSelected()) {
+			type = Automaton.MOORE;
+			states = buildStatesMoore();
+		}else {
+			type = Automaton.MEALY;
+			states = buildStatesMealy(stimuli.length);
+		}
+
+
+		auto = new Automaton(type, states, stimuli, responses);
+
+
 	}
 
-	private void readStates() {
+	private ArrayList<State> buildStatesMealy(int size){
+
+		ArrayList<State> list = new ArrayList<State>();
+		HashMap<String, State> map = new HashMap<>();
+
+		for (int i = 1; i < matrix.length; i++) {
+			String[] c = new String[size];
+			for (int j = 1; j < matrix[i].length; j++) {
+
+				String[] array = matrix[i][j].split(",");
+				c[j-1] = array[1];
+			}
+
+			char[] cc = castArray(c);
+
+			String name = matrix[i][0];
+			State s = new State(name, cc);
+			map.put(name, s);
+			list.add(s);
+
+		}
+
+		for (int i = 0; i < matrix.length-1; i++) {
+
+			for (int j = 0; j < matrix[i].length-1; j++) {
+
+				String[] array = matrix[i+1][j+1].split(",");
+				String name = array[0];
+				State s = map.get(name);
+
+				list.get(i).addSuccessor(s);
+
+			}
+
+		}
+		String message = "";
+		for (int i = 0; i < list.size(); i++) {
+			State s = list.get(i);
+			message += s.getName() + " = ";
+			for (int j = 0; j < s.getSuccessorStates().size(); j++) {
+				message += s.getSuccessorStates().get(j).getName() + s.getResponses()[j] + " ";
+			}
+			message += "\n";
+		}
+
+		System.out.println(message);
+
+		return list;
+	}
+
+	private ArrayList<State> buildStatesMoore(){
+
+		ArrayList<State> list = new ArrayList<State>();
+		HashMap<String, State> map = new HashMap<>();
 		
 		System.out.println(matrix.length);
-		System.out.println(matrix[0].length);
+		System.out.println(matrix[1].length);
 		
-		for (Node node : grid.getChildren()) {
+		for (int i = 1; i < matrix.length; i++) {
 			
-			int col = GridPane.getColumnIndex(node);
-			int row = GridPane.getRowIndex(node);
+			String c = matrix[i][matrix[i].length-1];
+			char ch = c.charAt(0);
 			
-			TextField tf = (TextField)node;
-			String s = tf.getText();
-			matrix[row][col] = s;
-			
+			char[] cc = new char[] {ch};
+
+			String name = matrix[i][0];
+			State s = new State(name, cc);
+			map.put(name, s);
+			list.add(s);
+
 		}
-		
-		for (int i = 0; i < matrix.length; i++) {
-			
-			for (int j = 0; j < matrix[i].length; j++) {
-				
-				System.out.print(matrix[i][j] + " ");
-				
+
+		for (int i = 0; i < matrix.length-1; i++) {
+			System.out.print(list.get(i).getName() + " ");
+			for (int j = 1; j < matrix[i].length-1; j++) {
+
+				String name = matrix[i+1][j];
+				State s = map.get(name);
+				System.out.print(name + " ");
+				list.get(i).addSuccessor(s);
+
 			}
 			
 			System.out.println();
+
+		}
+		
+		String message = "";
+		for (int i = 0; i < list.size(); i++) {
+			State s = list.get(i);
+			
+			message += s.getName() + " = ";
+			for (int j = 0; j < s.getSuccessorStates().size(); j++) {
+				message += s.getSuccessorStates().get(j).getName() + " ";
+			}
+			message += s.getResponses()[0] + "\n";
 		}
 
+		System.out.println(message);
+
+		return list;
+
 	}
-	
-	
+
+	private char[] castArray(String[] array) {
+
+		char[] chars = new char[array.length];
+
+		for (int i = 0; i < array.length; i++) {
+			char c = array[i].charAt(0);
+			chars[i] = c;
+		}
+
+		return chars;
+
+	}
+
+	private void readStates() {
+
+		for (Node node : grid.getChildren()) {
+
+			int col = GridPane.getColumnIndex(node);
+			int row = GridPane.getRowIndex(node);
+
+			TextField tf = (TextField)node;
+			String s = tf.getText();
+			matrix[row][col] = s;	
+			
+		}
+	}
+
+
 	@FXML
 	void show_Button(ActionEvent event) {
 
@@ -134,14 +270,14 @@ public class Gui {
 		output_TextField.setEditable(false);
 
 		saveButtonId.setDisable(false);
-		
+
 		if (mooreOption.isSelected()) {
 			matrix = new String[states.length+1][inputs.length+2];
 		}else {
 			matrix = new String[states.length+1][inputs.length+1];
 		}
-		
-		
+
+
 		showTemplate(states, inputs);
 
 	}
@@ -160,19 +296,14 @@ public class Gui {
 			TextField tf = new TextField(states[i]);
 			tf.setDisable(true);
 			tf.setPrefWidth(40);
-			//Label l = new Label(states[i]);
 			grid.add(tf, 0, i+1);
 		}
 
 		for (int i = 0; i < inputs.length; i++) {
-			//Label l = new Label(inputs[i]);
-			//l.setPrefWidth(40);
-			//l.setAlignment(Pos.CENTER);
-			
 			TextField tf = new TextField(inputs[i]);
 			tf.setDisable(true);
 			tf.setPrefWidth(40);
-			
+
 			grid.add(tf, i+1, 0);
 		}
 
@@ -198,7 +329,7 @@ public class Gui {
 			for (int i = 0; i < states.length; i++) {
 
 				TextField tf = new TextField();
-				
+
 
 				tf.setPrefWidth(40);
 				tf.setEditable(true);
@@ -206,10 +337,10 @@ public class Gui {
 				grid.add(tf, j, i+1);
 
 			}
-			
-			
+
+
 		}
-		
+
 		centralPane.getChildren().add(grid);
 
 	}

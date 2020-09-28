@@ -10,6 +10,8 @@ public class Automaton {
 	private ArrayList<State> states;
 	private char[] stimuli;
 	private char[] outputs;
+	public final static String MEALY = "Mealy";
+	public final static String MOORE = "Moore";
 
 	private HashMap<State, Integer> index;
 	
